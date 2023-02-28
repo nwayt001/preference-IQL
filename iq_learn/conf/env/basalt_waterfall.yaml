@@ -1,0 +1,9 @@
+# @package _global_
+
+# Put environment-specific parameters here. Config variables that are the same
+# for all 4 BASALT tasks should be defined in config.yaml.
+
+env:
+  name: MineRLBasaltMakeWaterfall-v0
+  max_episode_steps: 6000
+  

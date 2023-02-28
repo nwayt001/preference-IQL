@@ -1,0 +1,39 @@
+# iq-learn experiment log files
+.hydra
+logs/
+train/*.weights
+train/*.model
+wandb/
+*.csv
+*.log
+preferences/
+
+/human_agent/david_minerl_demonstrations.tar.gz
+/human_agent/minerl_demonstrations/
+/human_agent/logs/
+
+# Foundation models and experiment logs
+/vpt_agent/data/
+/vpt_agent/logs/
+/iq_learn/outputs/
+outputs/
+
+# expert dataset
+data/
+/iq_learn/experts/
+/experts/*.npy
+
+# Models and weights (force to add)
+*.model
+*.weight
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# State classifier local data
+/state_classifier/api.txt
+/state_classifier/frames/
+/state_classifier/labels/
+/state_classifier/videos/

@@ -1,0 +1,1 @@
+http://github.com/mrahtz/gym-moving-dot/tarball/master#egg=gym-moving-dot

@@ -1,0 +1,59 @@
+# @package _global_
+
+agent:
+  name: sac
+  _target_: agent.sac.SAC
+  obs_dim: ??? # to be specified later
+  action_dim: ??? # to be specified later
+
+  critic_cfg: ${q_net}
+  actor_cfg: ${diag_gaussian_actor}
+  init_temp: 0.001 # use a low temp for IL
+
+  alpha_lr: 1e-4
+  alpha_betas: [0.9, 0.999]
+
+  actor_lr: 1e-4
+  actor_betas: [0.9, 0.999]
+  actor_update_frequency: 1
+
+  critic_lr: 1e-4
+  critic_betas: [0.9, 0.999]
+  critic_tau: 0.005
+  critic_target_update_frequency: 1
+
+  # learn temperature coefficient (disabled by default)
+  learn_temp: false
+
+  # Use either value_dice actor or normal SAC actor loss
+  # vdice_actor: false
+
+q_net:
+  _target_: SingleQ
+  obs_dim: ${agent.obs_dim}
+  action_dim: ${agent.action_dim}
+  hidden_dim: 256
+  hidden_depth: 2
+
+diag_gaussian_actor:
+  _target_: agent.sac_models.DiagGaussianActor
+  obs_dim: ${agent.obs_dim}
+  action_dim: ${agent.action_dim}
+  hidden_dim: 256
+  hidden_depth: 2
+  log_std_bounds: [-5, 2]
+  
+use_reward: true
+reward:
+  reward_lr: 1e-4
+  reward_betas: [0.9, 0.999]
+  weight_decay: 1e-2
+  iq_term: false
+
+kl_loss: true          # Whether to use the KL loss
+kl_loss_weight: 0.5    # Weight that multiplies KL loss (if we're using it)
+kl_target_update_freq: 20000   # How often to update the target policy used by the KL divergence
+
+bc_loss: true          # Whether to use the BC loss
+bc_loss_weight: 0.5    # Weight that multiplies BC loss (if we're using it)
+

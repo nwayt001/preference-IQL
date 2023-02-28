@@ -1,0 +1,9 @@
+{
+  "challenge_id": "neurips-2022-minerl-basalt-competition",
+  "authors": ["KAIROS"],
+  "description": "IQ-Learning Agent for MineRL BASALT Challenge Tasks",
+  "licence": "MIT",
+  "gpu": true,
+  "debug": false,
+  "track": "basalt"
+}

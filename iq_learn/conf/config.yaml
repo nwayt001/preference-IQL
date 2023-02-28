@@ -1,0 +1,100 @@
+exp_name: ''
+project_name: ${env.name}
+vpt_model: ??   # 1, 2, or 3, corresponding to 1x, 2x, or 3x
+                # Currently set by train_iq.sh
+                
+phase: 1    # Phase 1: IQ-learn only. Phase 2: IQ-learn + pairwise preference llearning.
+                
+freeze_vpt_parameters: True
+# If freeze_vpt_parameters=True, you can stil unfreeze the last VPT layer by 
+# setting the following to True (it has no effect if freeze_vpt_parameters=False).
+unfreeze_last_vpt_layer: True
+# Make action embedding length the following fraction of the state embedding length:
+action_emb_frac: 0.5
+
+feed_learned_reward_into_Q: False
+
+cuda_deterministic: False
+device: 'cuda'
+
+gamma: 0.99
+seed: 0
+
+pretrain: null
+num_demos_skip: 0
+
+num_seed_steps: 0     # Not needed with VPT model
+only_expert_states: False
+
+data_loader:
+  n_workers: 32
+  epochs: 1
+  batch_size: 32
+  demo_frac: 0.25    # Use this fraction of the demos
+
+train:
+  batch: 4
+  use_target: True
+  soft_update: True
+  save_rate: 1000
+  policy_update_steps: 10  # Update policy weights in shared dictionary (shared 
+                           # between learning loop and env runners) after every
+                           # policy_update_steps gradient steps
+  
+online_queue:
+  num_env_runners: 4       # Number of environment runner processes
+  steps_add: 500           # After every steps_add environment steps, add new data to queue
+  
+eval:
+  policy: 
+  threshold: 500
+  use_baselines: False
+  eps: 10
+  transfer: False
+  expert_env: ''
+
+env:
+  #replay_mem: 50000
+  #initial_mem: 1280
+  #eps_steps: 1000
+  #eps_window: 100
+  #learn_steps: 1e5  # Not using this anymore. Stop learning when we run out of expert demos.
+  #eval_interval: 1e3
+
+  # use pixels
+  from_pixels: true
+
+#q_net:
+#  _target_: agent.softq_models.OfflineQNetwork
+
+wandb:
+  username: kairos
+
+method:
+  type: iq
+
+# Extra args
+log_interval: 100  # Log every this many steps
+log_dir: outputs/
+hydra_base_dir: ""
+eval_only: False
+
+# Do offline learning
+offline: False
+# Number of actor updates per env step
+num_actor_updates: 1
+
+# Collect human prefs via GUI
+human_prefs: False
+preferences:
+  min_segments_to_test: 20   # Minimum number of segments for preference GUI to start
+  trajectory_length: 60     # Length of each segment that we get preferences over
+  c: 1.0
+  delta: 3.0
+  min_prefs_batch: 1        # Minimum preferences for preference learning to start
+  max_prefs_batch: 10       # Maximum number of preferences  per learning update
+
+defaults:
+  - method: iq
+  - agent: softq
+  - env: cartpole
